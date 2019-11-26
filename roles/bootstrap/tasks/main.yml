@@ -1,0 +1,42 @@
+- name: Setting facts (step 1)
+  set_fact:
+    alpine_version: "{{ alpine_version | mandatory }}"
+    arch: "{{ arch | mandatory }}"
+    hostname: "{{ hostname | mandatory }}"
+    mount_point: "{{ bootstrap_mnt | mandatory }}"
+    ssh_ca_key: "{{ ssh_ca_key | mandatory }}"
+
+    domainname: "{{ domainname | default('home') }}"
+    otg_ethernet: "{{ otg_ethernet | default(false) | bool }}"
+    wifi_enabled: "{{ wifi_enabled | default(false) | bool }}"
+    wifi_psk: "{{ wifi_psk | default('') }}"
+    wifi_ssid: "{{ wifi_ssid | default('') }}"
+
+- name: Setting facts (phase 2)
+  set_fact:
+    alpine_tarball: "alpine-rpi-{{ alpine_version }}-{{ arch }}.tar.gz"
+    alpine_major  : "{{ alpine_version.split('.')[0] }}.{{ alpine_version.split('.')[1] }}"
+
+- name: Create staging directory
+  tempfile:
+    state: directory
+  register: tempfile
+  delegate_to: localhost
+
+# Download & burn Alpine Linux on SD Card mounted on bootstrap.mount_point
+- import_tasks: alpine.yml
+  delegate_to: localhost
+
+# Create overlay file
+- import_tasks: overlay.yml
+  delegate_to: localhost
+
+# Configure firmware files (cmdline.txt & usrcfg.txt) 
+- import_tasks: firmware.yml
+  delegate_to: localhost
+
+- name: Delete staging directory
+  file:
+    path: "{{ tempfile.path }}/"
+    state: absent
+  delegate_to: localhost

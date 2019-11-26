@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+# ensures openssh-server is installed before to be started
+
+NAME=bootstrap-sshd
+
+depend() {
+    before sshd
+}
+
+start() {
+    ebegin "Starting ${NAME}"
+    if [ ! -x /usr/sbin/sshd ]; then
+        apk add openssh-server
+        rc-service sshd start
+        eend $?
+    else
+        eend 0
+    fi
+}

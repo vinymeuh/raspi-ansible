@@ -1,0 +1,79 @@
+- name: Create sub directories in staging directory
+  file:
+    path: "{{ tempfile.path }}/{{ item }}" 
+    state: directory
+    mode: 0755
+  loop:
+    - etc
+    - etc/init.d
+    - etc/network
+    - etc/runlevels/boot
+    - etc/runlevels/default
+    - etc/runlevels/sysinit
+    - etc/ssh
+    - etc/wpa_supplicant
+
+- name: Generate configuration files
+  template:
+    src: "{{ item.file | default(item) }}"
+    dest: "{{ tempfile.path }}/{{ item.file | default(item) }}"
+    mode: "{{ item.mode | default('0644') }}"
+  loop:
+    - etc/hostname
+    - etc/hosts
+    - { file: etc/init.d/bootstrap-sshd, mode: "0755"}
+    - etc/network/interfaces
+    - etc/ssh/myca.pub
+    - etc/ssh/sshd_config
+
+- name: Configure network interfaces
+  include_tasks: overlay_interfaces.yml
+  loop: "{{ interfaces }}"
+
+- name: Configure wpa_supplicant
+  template:
+    src: "etc/wpa_supplicant/wpa_supplicant.conf"
+    dest: "{{ tempfile.path }}/etc/wpa_supplicant/wpa_supplicant.conf"
+    mode: 0644
+  when: wifi_enabled == true
+
+- name: Enable module for Ethernet over USB
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/modules"
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - dwc2
+    - g_ether
+  when: otg_ethernet == true
+
+- name: Create symbolic links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ tempfile.path }}/{{ item.dest }}"
+    state: link
+    force: yes
+    follow: no
+  loop:
+    - { dest: "etc/runlevels/boot/bootmisc", src: "/etc/init.d/bootmisc" }
+    - { dest: "etc/runlevels/boot/hostname", src: "/etc/init.d/hostname" }
+    - { dest: "etc/runlevels/boot/modules", src: "/etc/init.d/modules" }
+    - { dest: "etc/runlevels/boot/networking", src: "/etc/init.d/networking" }
+    - { dest: "etc/runlevels/boot/urandom", src: "/etc/init.d/urandom" }
+    - { dest: "etc/runlevels/default/bootstrap-sshd", src: "/etc/init.d/bootstrap-sshd" }
+    - { dest: "etc/runlevels/sysinit/devfs", src: "/etc/init.d/devfs" }
+    - { dest: "etc/runlevels/sysinit/dmesg", src: "/etc/init.d/dmesg" }
+    - { dest: "etc/runlevels/sysinit/hwdrivers", src: "/etc/init.d/hwdrivers" }
+    - { dest: "etc/runlevels/sysinit/mdev", src: "/etc/init.d/mdev" }
+    - { dest: "etc/runlevels/sysinit/modloop", src: "/etc/init.d/modloop" }
+
+- name: Create overlay file
+  command: gnutar czf {{ hostname }}.apkovl.tar.gz --owner=0 --group=0 etc
+  args:
+    chdir: "{{ tempfile.path }}"
+    warn: no
+
+- name: Copy overlay file on {{ mount_point }}
+  copy:
+    src: "{{ tempfile.path }}/{{ hostname }}.apkovl.tar.gz"
+    dest: "{{ mount_point }}"

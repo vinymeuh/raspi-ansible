@@ -1,0 +1,6 @@
+- name: Bootstrap Alpine Linux installation
+  hosts: "{{ target | default('no_hosts') }}"
+  gather_facts: no
+
+  roles:
+    - bootstrap

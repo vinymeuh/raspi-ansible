@@ -1,0 +1,21 @@
+- name: "auto {{ item.name }}"
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/network/interfaces"
+    line: "auto {{ item.name }}"
+
+- name: "iface {{ item.name }} inet {{ item.kind }}"
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/network/interfaces"
+    line: "iface {{ item.name }} inet {{ item.kind }}"
+
+- name: "address {{ item.ip }}"
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/network/interfaces"
+    line: "   address {{ item.ip }}"
+  when: item.ip is defined
+
+- name: "netmask {{ item.netmask }}"
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/network/interfaces"
+    line: "   netmask {{ item.netmask }}"
+  when: item.netmask is defined

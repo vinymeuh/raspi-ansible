@@ -1,0 +1,17 @@
+- name: Check if Alpine Linux seems to be already installed
+  stat:
+    path: "{{ mount_point }}/start.elf"
+  register: start_elf
+
+- name: Download Alpine Linux {{ alpine_version }} for {{ arch }}
+  get_url:
+    url: "http://dl-cdn.alpinelinux.org/alpine/v{{ alpine_major }}/releases/{{ arch }}/{{ alpine_tarball }}"
+    dest: "/tmp"
+  when: not start_elf.stat.exists
+
+# use command because unarchive module not working on macOS
+- name: Extract Alpine Linux on {{ mount_point }}
+  command: tar xzf /tmp/{{ alpine_tarball }} -C "{{ mount_point }}"
+  args:
+    warn: no
+  when: not start_elf.stat.exists

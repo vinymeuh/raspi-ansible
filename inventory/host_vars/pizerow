@@ -1,0 +1,14 @@
+hostname: "pizerow"
+
+alpine_version: "3.10.3"
+arch: "armhf"
+
+bootstrap_mnt: "/Volumes/PIZEROW" 
+  
+wifi_enabled: true
+  
+interfaces:
+  - {name: "wlan0", kind: "dhcp"}
+  - {name: "usb0", kind: "static", ip: "169.254.0.2", netmask: "255.255.0.0"}
+
+otg_ethernet: true

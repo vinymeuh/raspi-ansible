@@ -1,0 +1,3 @@
+[all]
+pizetwo ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
+pizerow ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
