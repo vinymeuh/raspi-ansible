@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+# install and start wpa_supplicant
+
+NAME=bootstrap-wpa-supplicant
+
+depend() {
+    need localmount
+    after bootmisc modules entropy
+    before net
+}
+
+start() {
+    ebegin "Starting ${NAME}"
+    if [ ! -x /etc/wpa_supplicant/wpa_cli.sh ]; then
+        apk add wpa_supplicant 
+        rc-service wpa_supplicant start
+        eend $?
+    else
+        eend 0
+    fi
+}

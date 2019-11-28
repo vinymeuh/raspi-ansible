@@ -4,9 +4,7 @@
 
 A set of [Ansible](https://www.ansible.com/) playbooks to setup and to manage [Alpine Linux](https://alpinelinux.org/) on my little fleet of Raspberry Pi.
 
-
-
-## Install Ansible
+## Install Ansible
 
 Assuming Python 3 interpreter is already installed:
 

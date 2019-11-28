@@ -11,7 +11,6 @@
     - etc/runlevels/default
     - etc/runlevels/sysinit
     - etc/ssh
-    - etc/wpa_supplicant
 
 - name: Generate configuration files
   template:
@@ -25,27 +24,6 @@
     - etc/network/interfaces
     - etc/ssh/myca.pub
     - etc/ssh/sshd_config
-
-- name: Configure network interfaces
-  include_tasks: overlay_interfaces.yml
-  loop: "{{ interfaces }}"
-
-- name: Configure wpa_supplicant
-  template:
-    src: "etc/wpa_supplicant/wpa_supplicant.conf"
-    dest: "{{ tempfile.path }}/etc/wpa_supplicant/wpa_supplicant.conf"
-    mode: 0644
-  when: wifi_enabled == true
-
-- name: Enable module for Ethernet over USB
-  lineinfile:
-    path: "{{ tempfile.path }}/etc/modules"
-    line: "{{ item }}"
-    create: yes
-  loop:
-    - dwc2
-    - g_ether
-  when: otg_ethernet == true
 
 - name: Create symbolic links
   file:
@@ -66,6 +44,46 @@
     - { dest: "etc/runlevels/sysinit/hwdrivers", src: "/etc/init.d/hwdrivers" }
     - { dest: "etc/runlevels/sysinit/mdev", src: "/etc/init.d/mdev" }
     - { dest: "etc/runlevels/sysinit/modloop", src: "/etc/init.d/modloop" }
+
+- name: Configure network interfaces
+  include_tasks: overlay_interfaces.yml
+  loop: "{{ interfaces }}"
+
+- name: Enable module for Ethernet over USB
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/modules"
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - dwc2
+    - g_ether
+  when: otg_ethernet == true
+
+- name: Configure wpa_supplicant
+  block:
+    - name: create /etc/wpa_supplicant
+      file:
+        path: "{{ tempfile.path }}/etc/wpa_supplicant"
+        state: directory
+        mode: 0755
+    - name: copy /etc/wpa_supplicant/wpa_supplicant.conf
+      template: 
+        src: "etc/wpa_supplicant/wpa_supplicant.conf"
+        dest: "{{ tempfile.path }}/etc/wpa_supplicant/wpa_supplicant.conf"
+        mode: 0644
+    - name: copy /etc/init.d/bootstrap-wpa-supplicant
+      template:
+        src: etc/init.d/bootstrap-wpa-supplicant
+        dest: "{{ tempfile.path }}/etc/init.d/bootstrap-wpa-supplicant"
+        mode: "0755"
+    - name: create symbolic link for bootstrap-wpa-supplicant
+      file:
+        src: "/etc/init.d/bootstrap-wpa-supplicant"
+        dest: "{{ tempfile.path }}/etc/runlevels/default/bootstrap-wpa-supplicant"
+        state: link
+        force: yes
+        follow: no
+  when: wifi_enabled == true
 
 - name: Create overlay file
   command: gnutar czf {{ hostname }}.apkovl.tar.gz --owner=0 --group=0 etc
