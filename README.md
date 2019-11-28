@@ -29,7 +29,7 @@ We should be able to connect remotely as root using ssh to manually (:bow:) fini
 
 ```shell
 cd /media/mmcblk0p1
-setup-alpine -f setup.answer        # Accepts all defaults choices
+setup-alpine -f setup.answer        # Accept all defaults choices
 rc-update add wpa_supplicant boot   # If wifi enabled
 rm -f /etc/runlevels/default/bootstrap-*
 apk update

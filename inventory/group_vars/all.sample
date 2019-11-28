@@ -1,0 +1,5 @@
+# As the 'all' file contains sensible configuration data, mine is not commited into the repository
+ssh_ca_key: ""
+
+wifi_ssid: ""
+wifi_psk: ""
