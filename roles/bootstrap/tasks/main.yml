@@ -8,6 +8,7 @@
 
     domainname: "{{ domainname | default('home') }}"
     otg_ethernet: "{{ otg_ethernet | default(false) | bool }}"
+    otg_macaddr: "{{ otg_macaddr | default('') }}"
     wifi_enabled: "{{ wifi_enabled | default(false) | bool }}"
     wifi_psk: "{{ wifi_psk | default('') }}"
     wifi_ssid: "{{ wifi_ssid | default('') }}"

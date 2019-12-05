@@ -6,6 +6,7 @@
   loop:
     - etc
     - etc/init.d
+    - etc/modprobe.d
     - etc/network
     - etc/runlevels/boot
     - etc/runlevels/default
@@ -58,6 +59,13 @@
     - dwc2
     - g_ether
   when: otg_ethernet == true
+
+- name: Set MAC address for Ethernet over USB
+  template:
+    src: "etc/modprobe.d/g_ether.conf"
+    dest: "{{ tempfile.path }}/etc/modprobe.d/g_ether.conf"
+    mode: "0644"
+  when: otg_ethernet == true and otg_macaddr != ""
 
 - name: Configure wpa_supplicant
   block:

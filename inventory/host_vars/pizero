@@ -1,0 +1,12 @@
+hostname: "pizero"
+
+alpine_version: "3.10.3"
+arch: "armhf"
+
+bootstrap_mnt: "/Volumes/PIZERO" 
+   
+interfaces:
+  - {name: "usb0", kind: "dhcp"}
+
+otg_ethernet: true
+otg_macaddr: "ba:56:64:eb:f2:1a"
