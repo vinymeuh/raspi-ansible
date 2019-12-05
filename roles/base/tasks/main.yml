@@ -1,0 +1,25 @@
+- name: Install packages
+  apk:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - rng-tools
+
+- name: Enable rngd service
+  service:
+    name: rngd
+    enabled: yes
+  notify: restart rngd
+
+- name: Add groups
+  group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - gpio
+
+- name: Setup /etc/mdev.conf for gpio devices
+  lineinfile:
+      path: /etc/mdev.conf
+      insertafter: console root:tty 0600
+      line: gpio.* root:gpio 0660

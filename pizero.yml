@@ -1,0 +1,5 @@
+- name: Setup pizero
+  hosts: pizero
+
+  roles:
+    - base
