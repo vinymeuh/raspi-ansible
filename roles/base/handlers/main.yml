@@ -1,3 +1,6 @@
+- name: update repositories indexes
+  command: apk update
+
 - name: restart rngd
   service:
     name: rngd

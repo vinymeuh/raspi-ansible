@@ -1,3 +1,10 @@
+- name: Enable community APK repository
+  replace:
+    path: /etc/apk/repositories
+    regexp: '^#(http://.*/v.*/community)'
+    replace: '\1'
+  notify: update repositories indexes
+
 - name: Install packages
   apk:
     name: "{{ item }}"
