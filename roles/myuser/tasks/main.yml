@@ -1,0 +1,19 @@
+- name: Generate random password for {{ myuser }}
+  shell: openssl rand -base64 64 | cryptpw
+  register: myuser_password
+
+- name: Add user "{{ myuser }}"
+  user:
+    name: "{{ myuser }}"
+    groups: gpio, wheel
+    password: "{{ myuser_password.stdout }}"
+
+- name: Install sudo
+  apk:
+    name: sudo
+    state: present
+
+- name: Enable passwordless sudo for the wheel group
+  lineinfile:
+    path: /etc/sudoers
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'

@@ -1,0 +1,6 @@
+- name: Setup pitwo
+  hosts: pitwo
+
+  roles:
+    - { role: base, tags: ['base'] }
+    - { role: myuser, tags: ['myuser'] }

@@ -3,12 +3,14 @@
     name: "{{ item }}"
     state: present
   loop:
+    - raspberrypi
     - rng-tools
 
 - name: Enable rngd service
   service:
     name: rngd
     enabled: yes
+    runlevel: sysinit
   notify: restart rngd
 
 - name: Add groups
