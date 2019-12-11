@@ -12,3 +12,5 @@ interfaces:
   - {name: "wlan0", kind: "dhcp"}
 
 # wifi by using rtl8188 usb key - TODO: firmware & wpa_supplicant configuration
+
+myuser: viny

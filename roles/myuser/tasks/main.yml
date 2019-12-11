@@ -1,12 +1,17 @@
 - name: Generate random password for {{ myuser }}
   shell: openssl rand -base64 64 | cryptpw
   register: myuser_password
+  changed_when: false
 
 - name: Add user "{{ myuser }}"
   user:
     name: "{{ myuser }}"
     groups: gpio, wheel
     password: "{{ myuser_password.stdout }}"
+    update_password: on_create
+
+- name: Add home directory to LBU included files
+  command: lbu add /home/{{ myuser }}
 
 - name: Install sudo
   apk:
@@ -17,3 +22,5 @@
   lineinfile:
     path: /etc/sudoers
     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
+- import_tasks: python.yml
