@@ -1,0 +1,15 @@
+hostname: "radiogaga"
+
+alpine_version: "3.11.3"
+arch: "armv7"
+
+bootstrap_mnt: "/Volumes/RADIOGAGA" 
+  
+wifi_enabled: false
+  
+interfaces:
+  - {name: "eth0", kind: "static", ip: "192.168.1.4", netmask: "255.255.255.0", gateway: "192.168.1.1"}
+
+dns:
+  search: "home"
+  nameservers: "192.168.1.1"
