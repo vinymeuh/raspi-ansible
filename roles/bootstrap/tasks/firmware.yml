@@ -1,12 +1,3 @@
-- name: Retrieves content of interfaces file
-  set_fact:
-    etc_network_interfaces: "{{ lookup('file', '{{ tempfile.path }}/etc/network/interfaces') }}"
-
-- name: Copy setup.answer file on {{ mount_point }}
-  template:
-    src: setup.answer
-    dest: "{{ mount_point }}"
-
 - name: Add dtoverlay=dwc2 in usercfg.txt
   lineinfile:
     path: "{{ mount_point }}/usercfg.txt"

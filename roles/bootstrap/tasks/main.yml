@@ -12,6 +12,7 @@
     wifi_enabled: "{{ wifi_enabled | default(false) | bool }}"
     wifi_psk: "{{ wifi_psk | default('') }}"
     wifi_ssid: "{{ wifi_ssid | default('') }}"
+  tags: debug
 
 - name: Setting facts (phase 2)
   set_fact:
@@ -23,6 +24,16 @@
     state: directory
   register: tempfile
   delegate_to: localhost
+  tags: debug
+
+- name: DEBUG MODE
+  block:
+    - debug:
+        msg: Staging directory is {{ tempfile.path }}
+    - name: Use staging directory as mount_point for debug
+      set_fact: 
+        mount_point: "{{ tempfile.path }}"
+  tags: [never, debug]
 
 # Download & burn Alpine Linux on SD Card mounted on bootstrap.mount_point
 - import_tasks: alpine.yml
@@ -31,10 +42,17 @@
 # Create overlay file
 - import_tasks: overlay.yml
   delegate_to: localhost
+  tags: debug
 
 # Configure firmware files (cmdline.txt & usrcfg.txt) 
 - import_tasks: firmware.yml
   delegate_to: localhost
+  tags: debug
+
+# Prepare response file for Alpine install (setup.answer) 
+- import_tasks: setup_answer.yml
+  delegate_to: localhost
+  tags: debug
 
 - name: Delete staging directory
   file:
