@@ -19,3 +19,9 @@
     path: "{{ tempfile.path }}/etc/network/interfaces"
     line: "   netmask {{ item.netmask }}"
   when: item.netmask is defined
+
+- name: "gateway {{ item.gateway }}"
+  lineinfile:
+    path: "{{ tempfile.path }}/etc/network/interfaces"
+    line: "   gateway {{ item.gateway }}"
+  when: item.gateway is defined

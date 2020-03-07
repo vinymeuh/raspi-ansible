@@ -50,6 +50,13 @@
   include_tasks: overlay_interfaces.yml
   loop: "{{ interfaces }}"
 
+- name: Configure /etc/resolv.conf
+  template:
+    src: "etc/resolv.conf"
+    dest: "{{ tempfile.path }}/etc/resolv.conf"
+    mode: 0644
+  when: dns is defined  
+
 - name: Enable module for Ethernet over USB
   lineinfile:
     path: "{{ tempfile.path }}/etc/modules"
