@@ -1,6 +1,6 @@
 hostname: "radiogaga"
 
-alpine_version: "3.11.3"
+alpine_version: "3.10.3"
 arch: "armv7"
 
 bootstrap_mnt: "/Volumes/RADIOGAGA" 
