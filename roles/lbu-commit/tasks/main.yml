@@ -1,0 +1,8 @@
+- name: Check LBU status
+  command: lbu status
+  register: lbu
+  changed_when: False
+
+- name: Commit LBU changes if any
+  command: lbu commit -d
+  when: lbu.stdout | length > 0

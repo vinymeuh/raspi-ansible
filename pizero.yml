@@ -2,4 +2,5 @@
   hosts: pizero
 
   roles:
-    - base
+    - { role: base, tags: ['base'] }
+    - { role: lbu-commit, tags: ['always'] }

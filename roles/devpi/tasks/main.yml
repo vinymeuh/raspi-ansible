@@ -1,0 +1,13 @@
+- name: Setting facts
+  set_fact:
+    myuser: "{{ myuser | default('viny') }}"
+
+- name: Install packages
+  apk:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - sudo
+    - py3-rpigpio
+
+- import_tasks: myuser.yml

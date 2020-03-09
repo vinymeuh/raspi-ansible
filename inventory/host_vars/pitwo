@@ -1,6 +1,6 @@
 hostname: "pitwo"
 
-alpine_version: "3.10.3"
+alpine_version: "3.11.3"
 arch: "armv7"
 
 bootstrap_mnt: "/Volumes/PITWO" 
@@ -11,6 +11,4 @@ interfaces:
   - {name: "eth0", kind: "dhcp"}
   - {name: "wlan0", kind: "dhcp"}
 
-# wifi by using rtl8188 usb key - TODO: firmware & wpa_supplicant configuration
-
-myuser: viny
+# wifi by using rtl8188 usb key - & wpa_supplicant configuration

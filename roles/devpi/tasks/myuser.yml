@@ -10,17 +10,7 @@
     password: "{{ myuser_password.stdout }}"
     update_password: on_create
 
-- name: Add home directory to LBU included files
-  command: lbu add /home/{{ myuser }}
-
-- name: Install sudo
-  apk:
-    name: sudo
-    state: present
-
 - name: Enable passwordless sudo for the wheel group
   lineinfile:
     path: /etc/sudoers
     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-
-- import_tasks: python.yml

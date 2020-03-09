@@ -3,4 +3,5 @@
 
   roles:
     - { role: base, tags: ['base'] }
-    - { role: myuser, tags: ['myuser'] }
+    - { role: devpi, tags: ['custom'] }
+    - { role: lbu-commit, tags: ['always'] }

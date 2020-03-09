@@ -1,6 +1,0 @@
-- name: Install Python packages
-  apk:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - py3-rpigpio
