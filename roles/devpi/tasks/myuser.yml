@@ -14,3 +14,10 @@
   lineinfile:
     path: /etc/sudoers
     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
+- name: Copy /home/{{ myuser }}/.profile
+  copy:
+    src: myuser_profile
+    dest: "/home/{{ myuser }}/.profile"
+    owner: "{{ myuser }}"
+    group: "{{ myuser }}"

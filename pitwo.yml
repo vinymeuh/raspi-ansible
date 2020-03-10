@@ -1,7 +1,15 @@
 - name: Setup pitwo
   hosts: pitwo
 
-  roles:
-    - { role: base, tags: ['base'] }
-    - { role: devpi, tags: ['custom'] }
-    - { role: lbu-commit, tags: ['always'] }
+  tasks:
+    - import_role:
+        name: base
+      tags: ['base']
+
+    - import_role:
+        name: devpi
+      tags: ['custom']
+
+    - import_role:
+        name: lbu-commit
+      tags: ['always']

@@ -8,6 +8,9 @@
     state: present
   loop:
     - sudo
+    - file
+    - git
     - py3-rpigpio
+    - libc6-compat
 
 - import_tasks: myuser.yml
