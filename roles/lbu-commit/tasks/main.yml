@@ -5,4 +5,8 @@
 
 - name: Commit LBU changes if any
   command: lbu commit -d
+  register: cmd
   when: lbu.stdout | length > 0
+  failed_when:
+    - cmd.rc == 1 and cmd.stdout != ""
+    - cmd.rc > 1
