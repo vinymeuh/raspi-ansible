@@ -21,3 +21,10 @@
     dest: "/home/{{ myuser }}/.profile"
     owner: "{{ myuser }}"
     group: "{{ myuser }}"
+
+- name: Copy /home/{{ myuser }}/.gitconfig
+  copy:
+    src: myuser_gitconfig
+    dest: "/home/{{ myuser }}/.gitconfig"
+    owner: "{{ myuser }}"
+    group: "{{ myuser }}"
