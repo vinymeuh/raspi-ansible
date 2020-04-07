@@ -1,2 +1,2 @@
 pip>=20.0
-ansible==2.9.5
+ansible==2.9.6

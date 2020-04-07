@@ -1,7 +1,0 @@
-[all]
-pitwo ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
-pizero ansible_host=192.168.2.19 ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
-pizerow ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
-pizetwo ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
-radiogaga ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
-radiopapa ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
