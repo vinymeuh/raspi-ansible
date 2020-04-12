@@ -1,0 +1,7 @@
+---
+- name: Deploy radiopapa
+  hosts: radiopapa
+
+  roles:
+    - vinymeuh.radiogaga
+    - lbu-commit
