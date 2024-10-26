@@ -4,7 +4,6 @@
     arch: "{{ arch | mandatory }}"
     hostname: "{{ hostname | mandatory }}"
     mount_point: "{{ bootstrap_mnt | mandatory }}"
-    ssh_ca_key: "{{ ssh_ca_key | mandatory }}"
 
     domainname: "{{ domainname | default('home') }}"
     otg_ethernet: "{{ otg_ethernet | default(false) | bool }}"

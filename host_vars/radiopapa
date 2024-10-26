@@ -1,9 +1,9 @@
 hostname: "radiopapa"
 
-alpine_version: "3.10.3"
+alpine_version: "3.20.3"
 arch: "armv7"
 
-bootstrap_mnt: "/Volumes/RADIOPAPA" 
+bootstrap_mnt: "/run/media/viny/RADIOPAPA" 
   
 wifi_enabled: true
 interfaces:
@@ -15,7 +15,6 @@ dac: "Hifiberry2"
 radiogagad_enabled: false
 rc_parallel: true
 usbkey_enabled: false
-wifi_enabled: true
 
 playlists:
   - {file: "Chante France.m3u", name: "Chante France", url: "http://stream1.chantefrance.com/Chante_France"}

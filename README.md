@@ -4,23 +4,12 @@
 
 A set of [Ansible](https://www.ansible.com/) playbooks to setup and to manage [Alpine Linux](https://alpinelinux.org/) on my little fleet of Raspberry Pi.
 
-## Install Ansible
-
-Assuming Python 3 interpreter is already installed:
-
-```shell
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt  
-```
-
 ## Bootstrapping Alpine Linux installation
 
-Mount the SD Card then use the **bootstrap.yml** playbook. It will downloads the Alpine Linux distribution, extracts it on the SD Card and performs minimal setup to be able to connect remotely to the Raspberry Pi just after the first boot.
+Mount the SD Card then use the **bootstrap.yml** playbook. It downloads the Alpine Linux distribution, extracts it on the SD Card and performs minimal setup to be able to connect remotely to the Raspberry Pi just after the first boot.
 
 ```shell
-source venv/bin/activate
-ansible-playbook bootstrap.yml -e target=pizerow
+ansible-playbook playbooks/bootstrap.yml -e target=pizerow
 ```
 
 Eject the SD card and use it to boot the Raspberry Pi.

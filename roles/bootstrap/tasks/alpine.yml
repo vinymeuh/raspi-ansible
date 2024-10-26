@@ -12,6 +12,4 @@
 # use command because unarchive module not working on macOS
 - name: Extract Alpine Linux on {{ mount_point }}
   command: tar xzf /tmp/{{ alpine_tarball }} -C "{{ mount_point }}"
-  args:
-    warn: no
   when: not start_elf.stat.exists

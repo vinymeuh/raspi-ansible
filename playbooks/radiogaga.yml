@@ -1,5 +1,5 @@
 ---
-- name: Deploy radiogaga
+- name: Setup radiogaga
   hosts: radiogaga
 
   roles:

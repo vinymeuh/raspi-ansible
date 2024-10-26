@@ -1,5 +1,5 @@
 ---
-- name: Deploy radiopapa
+- name: Setup radiopapa
   hosts: radiopapa
 
   roles:
