@@ -1,2 +1,2 @@
-127.0.0.1   {{ hostname }}.{{ domainname }} {{ hostname }} localhost.localdomain localhost
+127.0.0.1   {{ hostname }} localhost.localdomain localhost
 ::1	    localhost localhost.localdomain

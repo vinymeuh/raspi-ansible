@@ -33,7 +33,7 @@
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
-PermitRootLogin yes
+#PermitRootLogin yes
 
 #PubkeyAuthentication yes
 
@@ -56,7 +56,7 @@ PermitRootLogin yes
 
 # To disable tunneled clear text passwords, change to no here!
 #PasswordAuthentication yes
-#PermitEmptyPasswords no
+PermitEmptyPasswords yes
 
 # Change to no to disable s/key passwords
 #ChallengeResponseAuthentication yes

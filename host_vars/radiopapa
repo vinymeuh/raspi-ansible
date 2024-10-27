@@ -3,12 +3,10 @@ hostname: "radiopapa"
 alpine_version: "3.20.3"
 arch: "armv7"
 
-bootstrap_mnt: "/run/media/viny/RADIOPAPA" 
-  
 wifi_enabled: true
 interfaces:
-  - {name: "eth0", kind: "dhcp"}
   - {name: "wlan0", kind: "dhcp"}
+  - {name: "eth0", kind: "dhcp"}
 
 dac: "Hifiberry2"
 

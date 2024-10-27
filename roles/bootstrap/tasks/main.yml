@@ -1,38 +1,31 @@
 - name: Setting facts (step 1)
   set_fact:
+    #-- Mandatory
     alpine_version: "{{ alpine_version | mandatory }}"
     arch: "{{ arch | mandatory }}"
     hostname: "{{ hostname | mandatory }}"
-    mount_point: "{{ bootstrap_mnt | mandatory }}"
-
+    mount_point: "{{ mntdir | mandatory }}"
+    #-- Optional
     domainname: "{{ domainname | default('home') }}"
     otg_ethernet: "{{ otg_ethernet | default(false) | bool }}"
     otg_macaddr: "{{ otg_macaddr | default('') }}"
     wifi_enabled: "{{ wifi_enabled | default(false) | bool }}"
     wifi_psk: "{{ wifi_psk | default('') }}"
     wifi_ssid: "{{ wifi_ssid | default('') }}"
-  tags: debug
 
-- name: Setting facts (phase 2)
+- name: Setting facts (step 2)
   set_fact:
     alpine_tarball: "alpine-rpi-{{ alpine_version }}-{{ arch }}.tar.gz"
     alpine_major  : "{{ alpine_version.split('.')[0] }}.{{ alpine_version.split('.')[1] }}"
 
+- name: Create target directory
+  file: path="{{ mount_point }}" state=directory
+  delegate_to: localhost
+
 - name: Create staging directory
-  tempfile:
-    state: directory
+  tempfile: state=directory
   register: tempfile
   delegate_to: localhost
-  tags: debug
-
-- name: DEBUG MODE
-  block:
-    - debug:
-        msg: Staging directory is {{ tempfile.path }}
-    - name: Use staging directory as mount_point for debug
-      set_fact: 
-        mount_point: "{{ tempfile.path }}"
-  tags: [never, debug]
 
 # Download & burn Alpine Linux on SD Card mounted on bootstrap.mount_point
 - import_tasks: alpine.yml
@@ -41,20 +34,11 @@
 # Create overlay file
 - import_tasks: overlay.yml
   delegate_to: localhost
-  tags: debug
 
 # Configure firmware files (cmdline.txt & usrcfg.txt) 
 - import_tasks: firmware.yml
   delegate_to: localhost
-  tags: debug
-
-# Prepare response file for Alpine install (setup.answer) 
-- import_tasks: setup_answer.yml
-  delegate_to: localhost
-  tags: debug
 
 - name: Delete staging directory
-  file:
-    path: "{{ tempfile.path }}/"
-    state: absent
+  file: path="{{ tempfile.path }}/" state=absent
   delegate_to: localhost
