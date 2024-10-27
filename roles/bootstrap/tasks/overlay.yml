@@ -56,23 +56,6 @@
   template: src="etc/resolv.conf" dest="{{ tempfile.path }}/etc/resolv.conf" mode=0644
   when: dns is defined  
 
-- name: Enable module for Ethernet over USB
-  lineinfile:
-    path: "{{ tempfile.path }}/etc/modules"
-    line: "{{ item }}"
-    create: yes
-  loop:
-    - dwc2
-    - g_ether
-  when: otg_ethernet == true
-
-- name: Set MAC address for Ethernet over USB
-  template:
-    src: "etc/modprobe.d/g_ether.conf"
-    dest: "{{ tempfile.path }}/etc/modprobe.d/g_ether.conf"
-    mode: "0644"
-  when: otg_ethernet == true and otg_macaddr != ""
-
 - name: Configure wpa_supplicant
   block:
     - name: add package wpa_supplicant to /etc/apk/world
@@ -87,6 +70,18 @@
     - name: enable wpa_supplicant at boot
       file: src="/etc/init.d/wpa_supplicant" dest="{{ tempfile.path }}/etc/runlevels/boot/wpa_supplicant" state=link force=true follow=false
   when: wifi_enabled == true
+
+- name: Configure Ethernet over USB
+  block:
+    - name: Enable module for Ethernet over USB
+      lineinfile: path="{{ tempfile.path }}/etc/modules" line="{{ item }}" create=yes
+      loop:
+        - dwc2
+        - g_ether
+    - name: Set MAC address for Ethernet over USB
+      template: src="etc/modprobe.d/g_ether.conf" dest="{{ tempfile.path }}/etc/modprobe.d/g_ether.conf" mode="0644"
+      when: otg_macaddr != ""
+  when: otg_ethernet == true
 
 - name: Create overlay file
   command: tar czf {{ hostname }}.apkovl.tar.gz --owner=0 --group=0 etc
