@@ -2,34 +2,37 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A set of [Ansible](https://www.ansible.com/) playbooks to setup and to manage [Alpine Linux](https://alpinelinux.org/) on my little fleet of Raspberry Pi.
+A collection of [Ansible](https://www.ansible.com/) playbooks to setup and manage [Alpine Linux](https://alpinelinux.org/) on my little fleet of Raspberry Pi.
 
 ## Bootstrapping Alpine Linux installation
 
-Mount the SD Card then use the **bootstrap.yml** playbook. It downloads the Alpine Linux distribution, extracts it on the SD Card and performs minimal setup to be able to connect remotely to the Raspberry Pi just after the first boot.
+1. **Mount the SD Card** to your system at a specified mount directory (`mntdir`).
+2. Run the **bootstrap.yml** playbook to download and extract the Alpine Linux distribution onto the SD Card. This playbook also performs basic setup, enabling remote access to the Raspberry Pi upon the first boot.
 
 ```shell
-ansible-playbook playbooks/bootstrap.yml -e target=pizerow
+ansible-playbook playbooks/bootstrap.yml -e target=pizerow -e mntdir=/run/media/viny/RADIOPAPA
 ```
 
-Eject the SD card and use it to boot the Raspberry Pi.
-
-We should be able to connect remotely as root using ssh to manually (:bow:) finish the Alpine setup.
-
-```shell
-cd /media/mmcblk0p1
-setup-alpine -f setup.answer        # Accept all defaults choices
-apk add wpa_supplicant              # If wifi enabled
-rc-update add wpa_supplicant boot   # If wifi enabled
-rm -f /etc/runlevels/default/bootstrap-*
-apk update
-apk add python3
-lbu commit -d
-reboot
-```
-
-After reboot we should be able to ping the Raspberry Pi with ```ansible```:
+3. **Eject the SD Card** and insert it into the Raspberry Pi.
+4. **Boot the Raspberry Pi** and verify connectivity with Ansible:
 
 ```shell
 ansible --one-line -m ping pizerow
+```
+
+5. **Connect remotely** as the pi user via SSH to complete the initial setup of Alpine Linux manually:
+
+```shell
+doas su -
+apk update
+apk add python3
+lbu commit -d
+```
+
+## Additional system configuration
+
+To apply further configuration settings, run the dedicated playbook:
+
+```shell
+ansible-playbook playbooks/pizerow.yml 
 ```
