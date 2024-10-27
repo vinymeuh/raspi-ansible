@@ -1,0 +1,5 @@
+- name: Refresh repositories indexes
+  apk: update_cache=yes
+
+- import_tasks: firmware.yml
+- import_tasks: mpd.yml

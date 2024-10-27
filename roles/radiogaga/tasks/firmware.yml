@@ -1,0 +1,29 @@
+- name: Remount SD Card RW
+  command: mount -o remount,rw /media/mmcblk0p1
+  changed_when: false
+
+- name: Configure DAC
+  block:
+    - name: Fail if DAC is not supported
+      fail:
+        msg: Variable radiogaga['dac'] must be 'Hifiberry2' or 'SabreES9023'
+      when: radiogaga['dac'] is not in ["Hifiberry2", "SabreES9023"]
+    - name: Enable DAC Sabre ES9023
+      lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="{{ item }}" create=yes
+      loop:
+        - dtparam=i2s=on
+        - dtoverlay=hifiberry-dac
+      when: radiogaga['dac'] == "SabreES9023"
+    - name: Enable DAC Hifiberry2
+      lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtoverlay=hifiberry-dacplus" create=yes
+      when: radiogaga['dac'] == "Hifiberry2"
+
+- name: Disable the Pi integrated soundcard
+  lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtparam=audio=off"
+
+- name: Disable Bluetooth
+  lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtoverlay=pi3-disable-bt"
+
+- name: Remount SD Card RO
+  command: mount -o remount,ro /media/mmcblk0p1
+  changed_when: false

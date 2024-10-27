@@ -1,0 +1,9 @@
+- name: Install MPD
+  apk: name=mpd state=present
+
+- name: Copy /etc/mpd.conf
+  template: src=mpd.conf dest=/etc/mpd.conf owner=mpd group=audio mode=0640
+  notify: restart mpd
+
+- name: Enable MPD service
+  service: name=mpd enabled=yes

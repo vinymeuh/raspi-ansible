@@ -1,7 +1,14 @@
 ---
 - name: Setup radiopapa
   hosts: radiopapa
+  remote_user: pi
+  become: true
+  become_method: community.general.doas
 
-  roles:
-    - vinymeuh.radiogaga
-    - lbu-commit
+  vars:
+    radiogaga:
+      dac: "Hifiberry2"
+
+  tasks:
+    - {import_role: name=radiogaga tasks_from=base}
+    - {import_role: name=alpine tasks_from=lbu-commit}
