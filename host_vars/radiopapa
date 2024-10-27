@@ -1,4 +1,5 @@
 hostname: "radiopapa"
+ansible_user: "pi"
 
 alpine_version: "3.20.3"
 arch: "armv7"
@@ -6,25 +7,3 @@ arch: "armv7"
 wifi_enabled: true
 interfaces:
   - {name: "wlan0", kind: "dhcp"}
-  - {name: "eth0", kind: "dhcp"}
-
-dac: "Hifiberry2"
-
-radiogagad_enabled: false
-rc_parallel: true
-usbkey_enabled: false
-
-playlists:
-  - {file: "Chante France.m3u", name: "Chante France", url: "http://stream1.chantefrance.com/Chante_France"}
-  - {file: "Chérie FM.m3u", name: "Chérie FM", url: "http://185.52.127.163/fr/30201/mp3_128.mp3"}
-  - {file: "Classic FM.m3u", name: "Classic FM", url: "http://classicfm.ice.infomaniak.ch/classic-fm.mp3"} 
-  - {file: "Europe 1.m3u", name: "Europe 1", url: "http://ais-live.cloud-services.paris:8000/europe1.mp3"}
-  - {file: "France Inter.m3u", name: "France Inter", url: "https://icecast.radiofrance.fr/franceinter-midfi.mp3"}
-  - {file: "France Bleu Berry.m3u", name: "France Bleu Berry", url: "https://direct.francebleu.fr/live/fbberry-lofi.mp3"}
-  - {file: "M Radio.m3u", name: "M Radio", url: "http://mfm.ice.infomaniak.ch/mfm-128.mp3"}
-  - {file: "Nostalgie.m3u", name: "Nostalgie", url: "http://185.52.127.132/fr/30601/mp3_128.mp3"}
-  - {file: "Radio 80.m3u", name: "Radio 80", url: "http://100radio-80.ice.infomaniak.ch/100radio-80-128.mp3"}
-  - {file: "Radio Classique.m3u", name: "Radio Classique", url: "http://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3"}
-  - {file: "RFM.m3u", name: "RTL", url: "https://stream.rfm.fr/rfm.mp3"}
-  - {file: "RTL.m3u", name: "RTL", url: "https://streaming.radio.funradio.fr/rtl-1-44-128"}
-  - {file: "RTL2.m3u", name: "RTL", url: "https://icecast.rtl2.fr/rtl2-1-44-128"}
