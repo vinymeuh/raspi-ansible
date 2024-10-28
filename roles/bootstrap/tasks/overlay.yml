@@ -26,6 +26,7 @@
     - etc/hostname
     - etc/hosts
     - etc/lbu/lbu.conf
+    - { file: "etc/local.d/00-user-pi.start", mode: "0755" }
     - etc/network/interfaces
     - etc/ssh/sshd_config
 
@@ -47,6 +48,7 @@
     - { dest: "etc/runlevels/sysinit/hwdrivers", src: "/etc/init.d/hwdrivers" }
     - { dest: "etc/runlevels/sysinit/mdev", src: "/etc/init.d/mdev" }
     - { dest: "etc/runlevels/sysinit/modloop", src: "/etc/init.d/modloop" }
+    - { dest: "etc/runlevels/default/local", src: "/etc/init.d/local" }
 
 - name: Configure network interfaces
   include_tasks: overlay_interfaces.yml
