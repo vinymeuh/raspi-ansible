@@ -1,0 +1,12 @@
+if [ -f /media/mmcblk0p1/wpa_supplicant.conf ]; then
+    cp -p /media/mmcblk0p1/wpa_supplicant.conf /etc/wpa_supplicant
+    chown root:root /etc/wpa_supplicant/wpa_supplicant.conf
+    chmod 640 /etc/wpa_supplicant/wpa_supplicant.conf
+    lbu commit -d
+
+    mount -o remount,rw /media/mmcblk0p1
+    rm -f /media/mmcblk0p1/wpa_supplicant.conf
+    mount -o remount,ro /media/mmcblk0p1
+
+    rc-service wpa_supplicant restart
+fi

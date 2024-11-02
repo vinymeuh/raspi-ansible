@@ -27,6 +27,7 @@
     - etc/hosts
     - etc/lbu/lbu.conf
     - { file: "etc/local.d/00-user-pi.start", mode: "0755" }
+    - { file: "etc/local.d/10-copy-wpa-supplicant.start", mode: "0755" }
     - etc/network/interfaces
     - etc/ssh/sshd_config
 
