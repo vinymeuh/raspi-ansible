@@ -1,0 +1,8 @@
+if [ -f /tmp/playlist.start ]; then
+    pl=$(head -1 /tmp/playlist.start)
+    while [ -z "$(mpc current)" ]; do
+        mpc load "$pl"
+        mpc play
+        sleep 1
+    done
+fi

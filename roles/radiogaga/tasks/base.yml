@@ -1,5 +1,49 @@
-- name: Refresh repositories indexes
-  apk: update_cache=yes
+- name: Remount SD Card RW
+  command: mount -o remount,rw /media/mmcblk0p1
+  changed_when: false
 
-- import_tasks: firmware.yml
-- import_tasks: mpd.yml
+- name: Configure DAC
+  block:
+    - name: Fail if DAC is not supported
+      fail:
+        msg: Variable radiogaga['dac'] must be 'Hifiberry2' or 'SabreES9023'
+      when: radiogaga['dac'] is not in ["Hifiberry2", "SabreES9023"]
+    - name: Enable DAC Sabre ES9023
+      lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="{{ item }}" create=yes
+      loop:
+        - dtparam=i2s=on
+        - dtoverlay=hifiberry-dac
+      when: radiogaga['dac'] == "SabreES9023"
+    - name: Enable DAC Hifiberry2
+      lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtoverlay=hifiberry-dacplus" create=yes
+      when: radiogaga['dac'] == "Hifiberry2"
+
+- name: Disable the Pi integrated soundcard
+  lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtparam=audio=off"
+
+- name: Disable Bluetooth
+  lineinfile: path="/media/mmcblk0p1/usercfg.txt" line="dtoverlay=pi3-disable-bt"
+- block:
+    # WARNING: we need to remount SD Card RW to cache apk packages
+  - name: Install MPD
+    apk: name=mpd,mpc state=present
+  - name: Copy /etc/mpd.conf
+    template: src=etc/mpd.conf dest=/etc/mpd.conf owner=mpd group=audio mode=0640
+    notify: restart mpd
+  - name: Enable MPD service
+    service: name=mpd enabled=yes
+
+- name: Copy /etc/local.d/90-download-playlist.start
+  template: src="{{ item.file }}" dest="/{{ item.file }}" mode="{{ item.mode }}"
+  loop:
+    - { file: "etc/local.d/download-playlists.py", mode: "0644" }
+    - { file: "etc/local.d/90-download-playlist.start", mode: "0755" }
+
+- name: Copy /etc/local.d/91-mpc-start-playlist.start
+  template: src="{{ item.file }}" dest="/{{ item.file }}" mode="{{ item.mode }}"
+  loop:
+    - { file: "etc/local.d/91-mpc-start-playlist.start", mode: "0755" }
+  
+- name: Remount SD Card RO
+  command: mount -o remount,ro /media/mmcblk0p1
+  changed_when: false
