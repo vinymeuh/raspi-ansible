@@ -1,4 +1,5 @@
 alpine-base
 doas
+dosfstools
 openssl
 openssh
