@@ -11,4 +11,5 @@
 
   tasks:
     - { import_role: name=radiogaga tasks_from=base }
+    - { import_role: name=radiogaga tasks_from=radiogagad, tags: ["radiogagad"], }
     - { import_role: name=alpine tasks_from=lbu-commit }

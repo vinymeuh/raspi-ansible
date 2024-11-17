@@ -1,0 +1,62 @@
+- block:
+    - name: Create gpio group
+      group: name=gpio state=present
+    - name: Setup /etc/mdev.conf for gpio devices
+      lineinfile:
+        path: /etc/mdev.conf
+        insertafter: console root:tty 0600
+        line: gpiochip.* root:gpio 0660
+      notify: mdev scan
+
+- name: Create user radiogagad
+  user: name=radiogagad group=gpio home=/ create_home=no shell=/sbin/nologin comment=radiogagad
+
+- name: Retrieve informations about latest radiogagad released on github
+  uri:
+    url: https://api.github.com/repos/vinymeuh/radiogagad/releases/latest
+    return_content: true
+  register: json_response
+
+- block:
+    - name: set update_radiogagad to false
+      set_fact: update_radiogagad=false
+    - name: Retrieve current version of radiogagad
+      command: /usr/local/bin/radiogagad --version
+      changed_when: False
+      register: radiogagad_current
+    - name: Current radiogagad version is outdated, set update_radiogagad to true
+      set_fact: update_radiogagad=true
+      when: radiogagad_current.stdout < json_response.json.tag_name
+  rescue:
+    - name: Unable to check radiogagad version, set update_radiogagad to true
+      set_fact: update_radiogagad=true
+
+- block:
+    - name: Download latest radiogagad release from github
+      get_url:
+        url: "{{ json_response.json.assets.0.browser_download_url }}"
+        dest: /tmp/radiogagad.zip
+      changed_when: False
+    - name: Unarchive downloaded file
+      command: unzip -oq /tmp/radiogagad.zip -d /tmp
+      changed_when: False
+    - name: Copy radiogagad binary
+      copy: src=/tmp/radiogagad dest=/usr/local/bin/radiogagad remote_src=yes mode=0755
+      notify: restart radiogagad
+  when: update_radiogagad
+
+- name: Add the radiogagad binary to LBU included files
+  command: lbu add -v /usr/local/bin/radiogagad
+  register: lbucmd
+  changed_when: '"Adding" in lbucmd.stdout'
+
+- block:
+    - name: Copy radiogagad init.d script
+      template: src=etc/init.d/radiogagad dest=/etc/init.d/radiogagad mode=0755
+      notify: restart radiogagad
+    - name: Add the radiogagad init.d script to LBU included files
+      command: lbu add -v /etc/init.d/radiogagad
+      register: lbucmd
+      changed_when: '"Adding" in lbucmd.stdout'
+    - name: Enable radiogagad
+      service: name=radiogagad enabled=yes

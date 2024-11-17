@@ -1,2 +1,8 @@
+- name: mdev scan
+  command: mdev -s
+
 - name: restart mpd
   service: name=mpd state=restarted
+
+- name: restart radiogagad
+  service: name=radiogagad state=restarted

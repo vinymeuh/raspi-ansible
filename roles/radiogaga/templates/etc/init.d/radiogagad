@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+
+# init.d file for radiogagad
+
+name="radiogagad"
+command=/usr/local/bin/radiogagad
+pidfile="/var/run/$SVCNAME.pid"
+
+depend() {
+    need net localmount
+    use mpd
+}
+
+start() {
+    ebegin "Starting $name"
+    start-stop-daemon  --background --start --user radiogagad --group gpio --exec ${command} \
+        --stdout-logger "logger -t $name -p daemon.info"  \
+        --stderr-logger "logger -t $name -p daemon.err"  \
+        --make-pidfile --pidfile $pidfile
+    eend $?
+}
