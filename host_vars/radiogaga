@@ -1,31 +1,10 @@
 hostname: "radiogaga"
+ansible_user: "pi"
 
-alpine_version: "3.11.5"
+alpine_version: "3.20.3"
 arch: "armv7"
 
 wifi_enabled: false
 interfaces:
-  - {name: "eth0", kind: "static", ip: "192.168.1.4", netmask: "255.255.255.0", gateway: "192.168.1.1"}
-dns:
-  search: "home"
-  nameservers: "192.168.1.1"
+  - {name: "eth0", kind: "dhcp"}
 
-dac: "SabreES9023"
-
-usbkey_label: "USBKEY128G"
-usbkey_mnt: "/media/USBKEY"
-
-playlists:
-  - {file: "Nova.m3u", name: "Nova", url: "http://novazz.ice.infomaniak.ch/novazz-128.mp3"}
-  - {file: "J1 Radio.m3u", name: "J1 Radio", url: "http://hits.j1fm.tokyo"}
-  - {file: "J1 Gold.m3u", name: "J1 Gold", url: "http://gold.j1fm.tokyo"}
-  - {file: "J1 Xtra.m3u", name: "J1 Xtra", url: "http://xtra.j1fm.tokyo"}
-  - {file: "Classic FM.m3u", name: "Classic FM", url: "http://classicfm.ice.infomaniak.ch/classic-fm.mp3"} 
-  - {file: "Radio Classique.m3u", name: "Radio Classique", url: "http://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3"}
-  - {file: "La Grosse Radio Métal.m3u", name: "La Grosse Radio Métal", url: "http://hd.lagrosseradio.info/lagrosseradio-metal-192.mp3"}
-
-radiogagad_configuration:
-  mpd:
-    startup_playlists:
-      - Nova
-      - J1 Radio
