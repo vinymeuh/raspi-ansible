@@ -1,7 +1,7 @@
 /usr/bin/id pi 2>&1 >/dev/null
 if [ $? -ne 0 ]; then
    addgroup pi
-   adduser -h /home/pi -G pi -s /bin/ash pi
+   adduser -D -h /home/pi -G pi -s /bin/ash pi
    addgroup pi wheel
    passwd -d pi
 fi

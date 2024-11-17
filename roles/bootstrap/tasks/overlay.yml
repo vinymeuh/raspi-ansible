@@ -1,6 +1,6 @@
 - name: Create sub directories in staging directory
   file:
-    path: "{{ tempfile.path }}/{{ item }}" 
+    path: "{{ tempfile.path }}/{{ item }}"
     state: directory
     mode: 0755
   loop:
@@ -8,9 +8,11 @@
     - etc/apk
     - etc/init.d
     - etc/lbu
+    - etc/local.d
     - etc/modprobe.d
     - etc/network
     - etc/runlevels/boot
+    - etc/runlevels/default
     - etc/runlevels/sysinit
     - etc/ssh
 
@@ -43,7 +45,7 @@
     - { dest: "etc/runlevels/boot/modules", src: "/etc/init.d/modules" }
     - { dest: "etc/runlevels/boot/networking", src: "/etc/init.d/networking" }
     - { dest: "etc/runlevels/boot/ntpd", src: "/etc/init.d/ntpd" }
-    - { dest: "etc/runlevels/boot/openssh", src: "/etc/init.d/openssh" }
+    - { dest: "etc/runlevels/boot/sshd", src: "/etc/init.d/sshd" }
     - { dest: "etc/runlevels/sysinit/devfs", src: "/etc/init.d/devfs" }
     - { dest: "etc/runlevels/sysinit/dmesg", src: "/etc/init.d/dmesg" }
     - { dest: "etc/runlevels/sysinit/hwdrivers", src: "/etc/init.d/hwdrivers" }
@@ -57,7 +59,7 @@
 
 - name: Configure /etc/resolv.conf
   template: src="etc/resolv.conf" dest="{{ tempfile.path }}/etc/resolv.conf" mode=0644
-  when: dns is defined  
+  when: dns is defined
 
 - name: Configure wpa_supplicant
   block:
@@ -66,7 +68,7 @@
     - name: create /etc/wpa_supplicant directory
       file: path="{{ tempfile.path }}/etc/wpa_supplicant" state=directory mode=0755
     - name: copy /etc/wpa_supplicant/wpa_supplicant.conf
-      template: 
+      template:
         src: "etc/wpa_supplicant/wpa_supplicant.conf"
         dest: "{{ tempfile.path }}/etc/wpa_supplicant/wpa_supplicant.conf"
         mode: 0640

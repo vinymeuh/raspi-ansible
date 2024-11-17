@@ -10,7 +10,7 @@ A collection of [Ansible](https://www.ansible.com/) playbooks to setup and manag
 2. Run the **bootstrap.yml** playbook to download and extract the Alpine Linux distribution onto the SD Card. This playbook also performs basic setup, enabling remote access to the Raspberry Pi upon the first boot.
 
 ```shell
-ansible-playbook playbooks/bootstrap.yml -e target=pizerow -e mntdir=/run/media/viny/RADIOPAPA
+ansible-playbook playbooks/bootstrap.yml -e target=radiogaga -e mntdir=/run/media/viny/RADIOGAGA
 ```
 
 3. **Eject the SD Card** and insert it into the Raspberry Pi.
@@ -34,5 +34,5 @@ lbu commit -d
 To apply further configuration settings, run the dedicated playbook:
 
 ```shell
-ansible-playbook playbooks/pizerow.yml 
+ansible-playbook playbooks/pizerow.yml
 ```
