@@ -1,0 +1,2 @@
+- name: Copy /etc/fstab
+  template: src=etc/fstab dest=/etc/fstab mode=0755
