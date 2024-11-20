@@ -1,21 +1,12 @@
 #!/sbin/openrc-run
 
-# init.d file for radiogagad
-
-name="radiogagad"
 command=/usr/local/bin/radiogagad
-pidfile="/var/run/$SVCNAME.pid"
+command_background=true
+command_args_backgrounds="--daemon"
+command_user="radiogagad:gpio"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/radiogaga.log"
 
-depend() {
-    need net localmount
-    use mpd
-}
-
-start() {
-    ebegin "Starting $name"
-    start-stop-daemon  --background --start --user radiogagad --group gpio --exec ${command} \
-        --stdout-logger "logger -t $name -p daemon.info"  \
-        --stderr-logger "logger -t $name -p daemon.err"  \
-        --make-pidfile --pidfile $pidfile
-    eend $?
+start_pre() {
+   touch ${output_log} && chown ${command_user} ${output_log}
 }
