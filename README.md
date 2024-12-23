@@ -14,13 +14,8 @@ ansible-playbook playbooks/bootstrap.yml -e target=radiogaga -e mntdir=/run/medi
 ```
 
 3. **Eject the SD Card** and insert it into the Raspberry Pi.
-4. **Boot the Raspberry Pi** and verify connectivity with Ansible:
-
-```shell
-ansible --one-line -m ping pizerow
-```
-
-5. **Connect remotely** as the pi user via SSH to complete the initial setup of Alpine Linux manually:
+4. **Boot the Raspberry Pi**.
+5. **Connect remotely** as the pi user via SSH to complete the initial setup of Alpine Linux manually.
 
 ```shell
 doas su -
@@ -29,9 +24,21 @@ apk add python3
 lbu commit -d
 ```
 
+6. Verify connectivity with Ansible.
+
+```shell
+ansible --one-line -m ping pizerow
+```
+
 ## Additional system configuration
 
-To apply further configuration settings, run the dedicated playbook:
+THe first time:
+
+```shell
+ansible-galaxy collection install -r requirements.yml
+```
+
+Ten to apply further configuration settings, run the dedicated playbook:
 
 ```shell
 ansible-playbook playbooks/pizerow.yml

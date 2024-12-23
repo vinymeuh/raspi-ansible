@@ -1,0 +1,20 @@
+- name: base > Enable community APK repository
+  replace:
+    path: /etc/apk/repositories
+    regexp: '^#(http://.*/v.*/community)'
+    replace: '\1'
+  notify: update repositories indexes
+
+- block:
+  - name: base > Create gpio group
+    group: name=gpio state=present
+  - name: base > Setup /etc/mdev.conf for gpio devices
+    lineinfile:
+      path: /etc/mdev.conf
+      insertafter: console root:tty 0600
+      line: gpiochip.* root:gpio 0660
+    notify: mdev scan
+
+- name: base > Install packages
+  community.general.apk: name={{ base['packages'] | join(',') }}
+  when: base['packages'] is defined

@@ -1,15 +1,14 @@
-- name: Setup pitwo
-  hosts: pitwo
+- name: Setup pitwo 
+  hosts: pitwo 
+  remote_user: pi
+  become: true
+  become_method: community.general.doas
+
+  vars:
+    base:
+      packages:
+        - libgpiod 
 
   tasks:
-    - import_role:
-        name: base
-      tags: ['base']
-
-    - import_role:
-        name: devpi
-      tags: ['custom']
-
-    - import_role:
-        name: lbu-commit
-      tags: ['always']
+    - { import_role: name=alpine tasks_from=base }
+    - { import_role: name=alpine tasks_from=lbu-commit, tags: ["always"] }

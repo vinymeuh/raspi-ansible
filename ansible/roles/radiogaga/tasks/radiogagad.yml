@@ -1,12 +1,12 @@
 - block:
-    - name: Create gpio group
-      group: name=gpio state=present
-    - name: Setup /etc/mdev.conf for gpio devices
-      lineinfile:
-        path: /etc/mdev.conf
-        insertafter: console root:tty 0600
-        line: gpiochip.* root:gpio 0660
-      notify: mdev scan
+  - name: Create gpio group
+    group: name=gpio state=present
+  - name: Setup /etc/mdev.conf for gpio devices
+    lineinfile:
+      path: /etc/mdev.conf
+      insertafter: console root:tty 0600
+      line: gpiochip.* root:gpio 0660
+    notify: mdev scan
 
 - name: Create user radiogagad
   user: name=radiogagad group=gpio home=/ create_home=no shell=/sbin/nologin comment=radiogagad

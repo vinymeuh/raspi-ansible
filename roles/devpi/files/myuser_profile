@@ -1,7 +1,0 @@
-export PATH=$HOME/go/bin:$HOME/bin:$PATH
-
-alias cp='cp -i'
-alias df='df -Ph'
-alias ll='ls -lsa'
-alias mv='mv -i'
-alias rm='rm -i'

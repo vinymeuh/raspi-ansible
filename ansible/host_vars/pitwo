@@ -1,0 +1,10 @@
+hostname: "pitwo"
+ansible_user: "pi"
+
+alpine_version: "3.20.3"
+arch: "armv7"
+
+wifi_enabled: true 
+interfaces:
+  - {name: "wlan0", kind: "dhcp"}
+  - {name: "eth0", kind: "dhcp"}

@@ -1,0 +1,5 @@
+- name: mdev scan
+  command: mdev -s
+
+- name: update repositories indexes
+  command: apk update
